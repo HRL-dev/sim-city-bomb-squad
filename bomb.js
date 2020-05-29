@@ -8,7 +8,7 @@ let timer = document.getElementById("timer");
 /*--- Game Logic ----*/
 const STARTING_TIME = 30;
 let remainingTime = 0;
-let gameOver = false;
+let gameOver = true;
 let countdown = null; // will hold my countdown interval
 
 let wiresToCut = [];
@@ -46,14 +46,34 @@ function init() {
 }
 
 function wireClick(e) {
-    console.log("clicked wire box");
-    console.log(e.target.id)
+    console.log("You clicked " + e.target.id)
+    let color = e.target.id;
+    if (gameOver === false && wireState[color] === false) {
+        e.target.src = "img/cut-" + color + "-wire.png";
+        wireState[color] = true;
+        let wireIndex = wiresToCut.indexOf(color);
+        if (wireIndex > -1) {
+            // if the wire has an index, it's cut
+            console.log("Correct!")
+            wiresToCut.splice(wireIndex, 1);
+            if (wiresToCut.length < 1) {
+                endGame(true);
+            }
+        } else {
+            console.log("Incorrect!")
+            endGame(false);
+        }
+    }
 }
 
 function updateClock() {
    remainingTime--;
    // remainingTime = remainingTime - 1
-   timer.textContent = "00:00:" + remainingTime;
+   if (remainingTime >= 10) {
+    timer.textContent = "00:00:" + remainingTime;
+   } else {
+    timer.textContent = "00:00:0" + remainingTime;
+   }
    if (remainingTime <= 0) {
        endGame(false)
    }
