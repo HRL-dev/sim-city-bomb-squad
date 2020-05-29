@@ -41,17 +41,34 @@ function init() {
         }
     }
     console.log(wiresToCut)
-    countdown = setInterval(updateClock, 1000)
+    countdown = setInterval(updateClock, 100)
     resetButton.disabled = true;
 }
 
 function wireClick(e) {
     console.log("clicked wire box");
-    console.log(e.target)
+    console.log(e.target.id)
 }
 
 function updateClock() {
-    console.log("clock updating")
+   remainingTime--;
+   // remainingTime = remainingTime - 1
+   timer.textContent = "00:00:" + remainingTime;
+   if (remainingTime <= 0) {
+       endGame(false)
+   }
+}
+
+function endGame(win) {
+    console.log("win is " + win)
+    clearInterval(countdown)
+    gameOver = true;
+    resetButton.disabled = false;
+    if (win) {
+        timer.classList.add("green");
+    } else {
+        body.classList.add("flat");
+    }
 }
 
 })
